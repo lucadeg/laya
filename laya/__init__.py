@@ -1,5 +1,6 @@
 """Laya: Fast, non-autoregressive System 1 decision engine with calibrated probabilities."""
 
+from .advisory import autodev_questions, run_autodev_advisory
 from .agent import Agent, RLAgent, load
 from .common import (
     QTYPES,
@@ -26,6 +27,8 @@ from .shortlist import embed_fn_from_agent, predict_shortlist, shortlist_choice
 __version__ = "0.3.5"
 __all__ = [
     "Agent",
+    "autodev_questions",
+    "run_autodev_advisory",
     "RLAgent",
     "load",
     "Router",
