@@ -8,7 +8,13 @@ class StubRouter:
     def predict(self, state, questions, **kwargs):
         self.calls.append((state, questions, kwargs))
         return {
-            "answers": {"action": {"choice": "verify"}},
+            "answers": {
+                "action": {"choice": "verify", "confidence": 0.91},
+                "needs_review": {"noul": 0.72},
+                "outcome": {"choice": "verification", "confidence": 0.88},
+                "risk": {"score": 2.0},
+                "urgency": {"score": 1.0},
+            },
             "routing": {"model": "typed-decisions"},
         }
 
@@ -36,6 +42,10 @@ def test_autodev_advisory_is_explicitly_non_authoritative():
     assert router.calls[0][2]["task"] == "typed_decisions"
     assert result["routing"]["model"] == "typed-decisions"
     assert result["advisory"]["authoritative"] is False
+    assert result["advisory"]["provider"] == "laya"
+    assert result["advisory"]["signals"]["action"] == "verify"
+    assert result["advisory"]["signals"]["action_confidence"] == 0.91
+    assert result["advisory"]["signals"]["needs_review_probability"] == 0.72
     assert result["advisory"]["required_next_authority"] == (
         "deterministic_autodev_policy_and_hermes_brain"
     )
