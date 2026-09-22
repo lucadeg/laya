@@ -41,6 +41,9 @@ mcp = [
 # assets/, research/ and notebooks/ sit in the root, so auto-discovery bails out.
 packages = ["laya"]
 
+[project.scripts]
+laya-mcp = "laya.mcp_server:main"
+
 [project.urls]
 Homepage = "https://huggingface.co/convaiinnovations/laya"
 Demo = "https://huggingface.co/spaces/convaiinnovations/laya-demo"
