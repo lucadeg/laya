@@ -233,6 +233,47 @@ triage = agent.predict({"message": "My payment failed twice"}, laya.triage_quest
 
 ---
 
+## MCP server and AutoDev advisory
+
+Laya can run as a local Model Context Protocol server so Hermes, IDE agents, and
+other MCP hosts can call the decision engine without embedding Laya into their
+core process.
+
+Install the optional MCP dependency:
+
+```bash
+pip install "laya[mcp]"
+python -m laya.mcp_server
+```
+
+The default transport is stdio. For local Streamable HTTP:
+
+```bash
+LAYA_MCP_TRANSPORT=streamable-http \
+LAYA_MCP_HOST=127.0.0.1 \
+LAYA_MCP_PORT=8765 \
+python -m laya.mcp_server
+```
+
+The server exposes:
+
+- `route` — choose a checkpoint without inference;
+- `predict` — generic typed decisions;
+- `guard` — prompt-injection / jailbreak advisory;
+- `moderate` — content-safety advisory;
+- `triage` — support/work triage;
+- `autodev_advisory` — action, review, outcome, risk and urgency classification
+  for governed AutoDev pipelines;
+- `status` — local model residency and device status.
+
+The AutoDev result is explicitly non-authoritative. It may accelerate System-1
+classification, but it cannot authorize merge, deployment, budget increases,
+credential changes, financial transfers, destructive infrastructure changes, or
+evidence rewriting. Deterministic policy and the caller's authorization layer
+remain responsible for those decisions.
+
+---
+
 ## Decision Primitives
 
 | Primitive | Output | Use Cases |
