@@ -243,6 +243,9 @@ Install the optional MCP dependency:
 
 ```bash
 pip install "laya[mcp]"
+laya-mcp
+
+# Equivalent module form:
 python -m laya.mcp_server
 ```
 
