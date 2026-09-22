@@ -69,10 +69,27 @@ def run_autodev_advisory(router: Any, state: Mapping[str, Any] | str) -> Dict[st
     """Run the AutoDev advisory workflow through a Laya Router."""
     result = router.predict(state, autodev_questions(), task="typed_decisions")
     payload = dict(result)
+    answers = payload.get("answers") or {}
+    action = answers.get("action") or {}
+    needs_review = answers.get("needs_review") or {}
+    outcome = answers.get("outcome") or {}
+    risk = answers.get("risk") or {}
+    urgency = answers.get("urgency") or {}
     payload["advisory"] = {
         "schema": "laya.autodev.system1-advisory.v1",
+        "provider": "laya",
         "authoritative": False,
         "role": "fast_classification_and_triage",
+        "signals": {
+            "action": action.get("choice"),
+            "action_confidence": action.get("confidence"),
+            "needs_review_probability": needs_review.get("noul"),
+            "outcome": outcome.get("choice"),
+            "outcome_confidence": outcome.get("confidence"),
+            "risk_score": risk.get("score"),
+            "urgency_score": urgency.get("score"),
+        },
+        "routing": payload.get("routing"),
         "required_next_authority": "deterministic_autodev_policy_and_hermes_brain",
         "forbidden_direct_effects": [
             "merge",
